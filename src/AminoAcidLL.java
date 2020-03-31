@@ -14,7 +14,11 @@ class AminoAcidLL{
    * pair and increments the codon counter for that codon.
    * NOTE: Does not check for repeats!! */
   AminoAcidLL(String inCodon){
-  
+    aminoAcid = AminoAcidResources.getAminoAcidFromCodon(inCodon);
+    codons = AminoAcidResources.getCodonListForAminoAcid(aminoAcid);
+    addCodon(inCodon);
+    // TODO: add codon method to add to amino acids
+    next = null;
   }
 
   /********************************************************************************************/
@@ -24,7 +28,18 @@ class AminoAcidLL{
    * If there is no next node, add a new node to the list that would contain the codon. 
    */
   private void addCodon(String inCodon){
-  
+    if(aminoAcid == AminoAcidResources.getAminoAcidFromCodon(inCodon)){
+      //incr codon
+    }
+    if(next != null){
+      next.addCodon(inCodon);
+    } else {
+      next = new AminoAcidLL(inCodon);
+    }
+  }
+
+  private void incrCodons(char codon){
+
   }
 
 
@@ -91,6 +106,13 @@ class AminoAcidLL{
   /********************************************************************************************/
   /* Static method for generating a linked list from an RNA sequence */
   public static AminoAcidLL createFromRNASequence(String inSequence){
+    String node;
+    while(inSequence.length() >= 3){
+      new AminoAcidLL(inSequence.substring(0,4));
+      if (inSequence.substring(4).length() >=3) {
+        inSequence = inSequence.substring(4);
+      }
+    }
     return null;
   }
 
