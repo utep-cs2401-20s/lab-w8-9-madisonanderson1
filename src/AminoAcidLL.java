@@ -100,38 +100,53 @@ class AminoAcidLL{
     }
   }
 
+  public int listLength(){
+    int count =0;
+    AminoAcidLL current = this;
+    while (current != null){
+      count++;
+      current=current.next;
+    }
+    return count;
+  }
+
 
   /********************************************************************************************/
   /* Recursively returns the total list of amino acids in the order that they are in in the linked list. */
+
+
   public char[] aminoAcidList(){
-    char[] aaList= new char[aminoAcidList().length];
+    char[] aaList= new char[listLength()];
     return getAminoAcids(aaList, this, 0);
+
   }
 
   public char[] getAminoAcids(char[] list, AminoAcidLL head, int count){
-    if (head == null){
+    if (head.next == null){
       list[count] = head.aminoAcid;
       return list;
     }else {
       list[count] = head.aminoAcid;
-      return getAminoAcids(list, head.next, count++);
+      count++;
+      return getAminoAcids(list, head.next, count);
     }
   }
 
   /********************************************************************************************/
   /* Recursively returns the total counts of amino acids in the order that they are in in the linked list. */
   public int[] aminoAcidCounts(){
-    int[] aaList= new int[aminoAcidList().length];
+    int[] aaList= new int[listLength()];
     return getAminoAcidCount(aaList, this, 0);
   }
 
   public int[] getAminoAcidCount(int[] list, AminoAcidLL head, int count){
-    if (head == null){
-      list[count] = head.aminoAcid;
+    if (head.next == null){
+      list[count] = head.totalCount();
       return list;
     }else {
-      list[count] = head.aminoAcid;
-      return getAminoAcidCount(list, head.next, count++);
+      list[count] = head.totalCount();
+      count++;
+      return getAminoAcidCount(list, head.next, count);
     }
   }
   /********************************************************************************************/
@@ -157,16 +172,18 @@ class AminoAcidLL{
   /********************************************************************************************/
   /* Static method for generating a linked list from an RNA sequence */
   public static AminoAcidLL createFromRNASequence(String inSequence){
-    int count = 3;
-    AminoAcidLL iter = new AminoAcidLL(inSequence.substring(0,3));
-    while (count < inSequence.length()){
-      if(AminoAcidResources.getAminoAcidFromCodon(inSequence.substring(0,3)) == '*'){
-        break;
-      }
-      inSequence = inSequence.substring(count);
-      iter.addCodon(inSequence.substring(0,3));
-    }
-    return iter;
+   int count = 3;
+   AminoAcidLL iter = new AminoAcidLL(inSequence.substring(0,3));
+   while (count < inSequence.length()){
+     if(AminoAcidResources.getAminoAcidFromCodon(inSequence.substring(0,3))=='*'){
+       break;
+     }
+     inSequence = inSequence.substring(count);
+     if(inSequence.length()>=3) {
+       iter.addCodon(inSequence.substring(0, 3));
+     }
+   }
+   return iter;
   }
 
 
